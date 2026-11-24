@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IA por Dentro — Guias gratuitos de IA para médicos | Dr. Filemom</title>
+<meta name="description" content="Três guias gratuitos de inteligência artificial para médicos — do primeiro prompt ao primeiro produto. Escolha seu nível, baixe o PDF e teste o método PACE agora.">
+<meta name="theme-color" content="#07131c">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="IA por Dentro — 3 guias gratuitos de IA para médicos">
+<meta property="og:description" content="Do primeiro prompt ao primeiro produto. Escolha seu nível e baixe o PDF.">
+<meta property="og:image" content="img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* Tipo: software/educação em IA. Paleta: azul-noite + água dos PDFs (marca já existente);
+   coral só para alertas, verde/amarelo/vermelho só no semáforo de dados. */
+:root{
+  --bg:#07131c;--bg2:#0b1c28;--card:#0f2433;--card2:#123044;--line:#1f3d4d;
+  --ink:#effafc;--muted:#9fbac3;--aqua:#14c3d3;--aqua2:#6ae6e8;--coral:#ff9b7a;
+  --ok:#3ccf8e;--mid:#f4c152;--bad:#ff6b6b;
+  --r:16px;--max:1180px;
+  --display:"Space Grotesk",system-ui,sans-serif;--body:Figtree,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--body);overflow-x:clip;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%;height:auto}
+a{color:var(--aqua2);text-decoration:none}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.025em;margin:0;text-wrap:balance}
+h1{font-size:clamp(38px,5.2vw,66px);line-height:1.02}
+h2{font-size:clamp(32px,4.4vw,52px);line-height:1.05}
+h3{font-size:22px;line-height:1.15}
+p{margin:0}
+.box{max-width:var(--max);margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.sec{padding:clamp(72px,10vw,128px) 0}
+.sec-head{max-width:720px;margin-bottom:44px}
+.sec-head p{color:var(--muted);margin-top:16px;font-size:18px}
+:focus-visible{outline:3px solid var(--aqua2);outline-offset:3px;border-radius:6px}
+
+/* Botões e links: um par só */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:12px;
+  font:700 16px/1 var(--body);border:1px solid transparent;cursor:pointer;transition:transform .15s,background .2s,border-color .2s,box-shadow .2s}
+.btn svg{width:20px;height:20px;flex:none}
+.btn-p{background:var(--aqua);color:#032029;box-shadow:0 10px 30px -10px #14c3d3aa}
+.btn-p:hover{background:var(--aqua2);transform:translateY(-2px)}
+.btn-s{background:transparent;color:var(--ink);border-color:#3a5b6b}
+.btn-s:hover{border-color:var(--aqua);transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.98)}
+.ln{background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .25s}
+.ln:hover{background-size:100% 1px}
+
+/* Navegação */
+.nav{position:sticky;top:0;z-index:20;background:#07131ccc;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #ffffff0d}
+.nav .box{display:flex;align-items:center;gap:24px;height:68px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);font:700 18px var(--display);letter-spacing:-.02em;margin-right:auto}
+.brand i{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--aqua),#0a6c82);display:grid;place-items:center}
+.brand i svg{width:18px;height:18px}
+.nav nav{display:flex;gap:26px}
+.nav nav a{color:var(--muted);font-size:15px;font-weight:500}
+.nav nav a:hover{color:var(--ink)}
+.nav .btn{min-height:42px;padding:0 16px;font-size:14px}
+
+/* Hero */
+.hero{position:relative;min-height:calc(100svh - 68px);display:flex;align-items:center;padding:56px 0 64px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 70% at 78% 40%,#12506088,transparent 70%),radial-gradient(40% 50% at 10% 100%,#0e3a4a66,transparent 70%);pointer-events:none}
+.mesh{position:absolute;inset:0;width:100%;height:100%;opacity:.5;pointer-events:none}
+.hero .box{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:48px;align-items:center;width:100%}
+.kicker{display:inline-flex;align-items:center;gap:10px;padding:7px 14px 7px 8px;border:1px solid var(--line);border-radius:99px;background:#0d2230;color:var(--muted);font-size:14px;margin-bottom:26px}
+.kicker b{background:var(--aqua);color:#032029;border-radius:99px;padding:3px 10px;font-size:12px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--aqua2),var(--aqua));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{color:var(--muted);font-size:clamp(18px,1.6vw,20px);max-width:540px;margin:24px 0 32px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:34px;color:var(--muted);font-size:15px}
+.facts span{display:flex;align-items:center;gap:8px}
+.facts span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--aqua)}
+
+.stack{position:relative;height:min(560px,62vw);perspective:1400px}
+.stack img{position:absolute;top:50%;left:50%;width:min(300px,46%);border-radius:10px;box-shadow:0 40px 80px -20px #000c,0 0 0 1px #ffffff14;
+  transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.stack .c1{transform:translate(-118%,-46%) rotate(-9deg)}
+.stack .c2{transform:translate(-50%,-54%) rotate(0deg);z-index:2}
+.stack .c3{transform:translate(18%,-46%) rotate(9deg)}
+.stack.pre img{transform:translate(-50%,-50%) rotate(0) scale(.92)}
+.stack:hover .c1{transform:translate(-128%,-48%) rotate(-12deg)}
+.stack:hover .c3{transform:translate(28%,-48%) rotate(12deg)}
+.stack:hover .c2{transform:translate(-50%,-58%)}
+
+/* Guias */
+.guides{background:linear-gradient(var(--bg),var(--bg2))}
+.picker{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:30px}
+.picker span{color:var(--muted);font-size:15px;margin-right:6px}
+.chip{min-height:44px;padding:0 16px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:500 15px var(--body);cursor:pointer;transition:border-color .2s,background .2s}
+.chip:hover{border-color:var(--aqua)}
+.chip[aria-pressed=true]{background:#0f3b4a;border-color:var(--aqua);color:var(--aqua2)}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.card{position:relative;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;transition:transform .2s,border-color .25s,box-shadow .25s,opacity .25s}
+.card:hover{transform:translateY(-2px);border-color:#2f5a6c}
+.card.hit{border-color:var(--aqua);box-shadow:0 0 0 4px #14c3d326,0 30px 60px -30px #14c3d366}
+.cards.focus .card:not(.hit){opacity:.55}
+.badge{position:absolute;top:14px;right:14px;background:var(--aqua);color:#032029;font:700 12px var(--body);padding:5px 10px;border-radius:99px;opacity:0;transform:translateY(-4px);transition:.25s}
+.card.hit .badge{opacity:1;transform:none}
+.thumb{border-radius:10px;overflow:hidden;aspect-ratio:620/877;max-height:300px;margin-bottom:20px;background:#06121b}
+.thumb img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .4s}
+.card:hover .thumb img{transform:scale(1.03)}
+.lvl{color:var(--aqua2);font-size:14px;font-weight:700;margin-bottom:6px}
+.card h3{margin-bottom:10px}
+.card .for{color:var(--muted);font-size:16px;margin-bottom:16px}
+.card ul{list-style:none;padding:0;margin:0 0 20px;display:grid;gap:8px;font-size:15px}
+.card li{display:flex;gap:10px}
+.card li::before{content:"";flex:none;width:16px;height:16px;margin-top:4px;border-radius:5px;background:#14c3d322 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%236ae6e8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
+.card .meta{color:var(--muted);font-size:14px;margin:auto 0 14px}
+.card .btn{width:100%}
+.all{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;margin-top:22px;padding:20px 24px;border:1px dashed #2f5566;border-radius:var(--r)}
+.all p{color:var(--muted)}
+.all b{color:var(--ink)}
+
+/* Construtor PACE */
+.lab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:22px;align-items:stretch}
+.form,.out{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px}
+.field{margin-bottom:18px}
+.field label{display:flex;align-items:baseline;gap:10px;font-weight:700;margin-bottom:8px}
+.field label b{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#14c3d322;color:var(--aqua2);font:700 15px var(--display)}
+.field label small{color:var(--muted);font-weight:400;font-size:14px}
+input[type=text],textarea{width:100%;font:16px/1.45 var(--body);color:var(--ink);background:#0a1b26;border:1px solid var(--line);border-radius:10px;padding:12px 14px;transition:border-color .2s}
+textarea{resize:vertical;min-height:76px}
+input:focus,textarea:focus{outline:none;border-color:var(--aqua)}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg .chip{min-height:40px;font-size:14px}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.out{display:flex;flex-direction:column;background:#06131b;border-color:#1b4252;position:relative;overflow:hidden}
+.out::before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,var(--aqua),var(--aqua2),transparent)}
+.out-top{display:flex;align-items:center;gap:8px;margin-bottom:16px;color:var(--muted);font-size:14px}
+.out-top i{width:10px;height:10px;border-radius:50%;background:#26404d}
+.out-top i:first-child{background:var(--aqua)}
+.out-top span{margin-left:6px}
+.prompt{flex:1;white-space:pre-wrap;font:15px/1.7 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#d6f3f6;min-height:260px}
+.prompt mark{background:none;color:var(--aqua2);font-weight:700}
+.prompt .ph{color:#5f7f8a}
+.out .row{margin-top:18px;align-items:center}
+.copied{color:var(--ok);font-size:14px;font-weight:700}
+.warn{margin-top:14px;font-size:14px;color:var(--coral);display:flex;gap:8px}
+
+/* Semáforo */
+.lights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.light{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;border-top:4px solid var(--c)}
+.light .dot{width:14px;height:14px;border-radius:50%;background:var(--c);box-shadow:0 0 20px var(--c);margin-bottom:18px}
+.light h3{margin-bottom:10px}
+.light p{color:var(--muted);font-size:16px}
+.law{margin-top:26px;display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;color:var(--muted);font-size:16px}
+.law b{color:var(--ink)}
+
+/* Sobre + final */
+.about{background:var(--bg2)}
+.about .box{display:grid;grid-template-columns:auto minmax(0,1fr);gap:48px;align-items:center}
+.mono{width:clamp(140px,18vw,200px);aspect-ratio:1;border-radius:28px;background:linear-gradient(140deg,var(--aqua),#0a5b70);display:grid;place-items:center;color:#032029;font:700 clamp(60px,8vw,88px)/1 var(--display);box-shadow:0 30px 60px -20px #14c3d355}
+.about p{color:var(--muted);margin-top:16px;max-width:640px;font-size:18px}
+.about .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.about .tags span{border:1px solid var(--line);border-radius:99px;padding:6px 14px;font-size:14px;color:var(--ink)}
+.end{text-align:center;position:relative;overflow:hidden}
+.end::before{content:"";position:absolute;left:50%;top:50%;width:900px;height:600px;transform:translate(-50%,-50%);background:radial-gradient(closest-side,#14c3d326,transparent);pointer-events:none}
+.end .box{position:relative}
+.end p{color:var(--muted);max-width:560px;margin:18px auto 32px;font-size:18px}
+.end .cta{justify-content:center}
+footer{border-top:1px solid #ffffff10;padding:30px 0 40px;color:var(--muted);font-size:14px}
+footer .box{display:flex;flex-wrap:wrap;gap:12px 30px;justify-content:space-between}
+footer p{max-width:640px}
+
+@media(max-width:960px){
+  .hero .box,.lab,.about .box{grid-template-columns:minmax(0,1fr)}
+  .stack{height:min(440px,78vw);order:-1}
+  .hero{min-height:auto;padding-top:28px}
+  .cards,.lights{grid-template-columns:minmax(0,1fr)}
+  .card{display:grid;grid-template-columns:150px minmax(0,1fr);column-gap:22px}
+  .card .thumb{grid-row:1/8;margin:0;max-height:none;align-self:start}
+  .card .badge{top:10px;right:10px}
+  .about .box{gap:28px}
+}
+@media(max-width:720px){.nav nav{display:none}}
+@media(max-width:560px){
+  body{font-size:16px}
+  .nav .box{height:60px}
+  .cta .btn,.all .btn{width:100%}
+  .card{display:flex}
+  .card .thumb{max-height:220px;aspect-ratio:auto;height:220px}
+  .stack img{width:44%}
+  .form,.out{padding:20px}
+  .prompt{font-size:14px;min-height:200px}
+  .facts{gap:8px 18px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="box">
+    <a class="brand" href="#topo" aria-label="IA por Dentro, início">
+      <i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#032029" stroke-width="2.2" stroke-linecap="round"><circle cx="6" cy="7" r="2"/><circle cx="18" cy="7" r="2"/><circle cx="12" cy="17" r="2"/><path d="M7.6 8.2l3.2 7M16.4 8.2l-3.2 7M8 7h8"/></svg></i>
+      IA por Dentro
+    </a>
+    <nav aria-label="Seções">
+      <a class="ln" href="#guias">Guias</a>
+      <a class="ln" href="#metodo">Teste o método</a>
+      <a class="ln" href="#seguranca">Segurança</a>
+      <a class="ln" href="#autor">Autor</a>
+    </nav>
+    <a class="btn btn-s" href="https://www.instagram.com/drfilemombr/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>Seguir
+    </a>
+  </div>
+</header>
+
+<main id="topo">
+
+<section class="hero">
+  <svg class="mesh" id="mesh" aria-hidden="true"></svg>
+  <div class="box">
+    <div>
+      <p class="kicker"><b>Grátis</b> Coleção médica · Edição 2026</p>
+      <h1>Inteligência artificial para médicos, <em>do primeiro prompt ao primeiro produto.</em></h1>
+      <p class="lead">Três guias em PDF escritos por um médico de plantão, com método, prompts prontos e o cuidado que a medicina exige com dados e evidência.</p>
+      <div class="cta">
+        <a class="btn btn-p" href="#guias"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0-5-5m5 5 5-5M5 20h14"/></svg>Escolher meu guia</a>
+        <a class="btn btn-s" href="#metodo">Testar o método agora</a>
+      </div>
+      <div class="facts"><span>3 níveis</span><span>43 páginas</span><span>Prompts para copiar</span><span>Inclui a Resolução CFM 2.454/2026</span></div>
+    </div>
+    <div class="stack pre" id="stack">
+      <img class="c1" src="img/capa-01.jpg" alt="Capa do guia 01, Básico: Entenda a IA. Comece a usar." width="620" height="877">
+      <img class="c2" src="img/capa-02.jpg" alt="Capa do guia 02, Intermediário: Da conversa ao método." width="620" height="877">
+      <img class="c3" src="img/capa-03.jpg" alt="Capa do guia 03, Avançado: Da IA usada à IA criada." width="620" height="877">
+    </div>
+  </div>
+</section>
+
+<section class="sec guides" id="guias">
+  <div class="box">
+    <div class="sec-head">
+      <h2>Escolha o guia do seu nível</h2>
+      <p>Cada guia termina com um desafio prático e diz quando você está pronto para o próximo.</p>
+    </div>
+    <div class="picker" role="group" aria-label="Qual frase descreve você?">
+      <span>Você hoje:</span>
+      <button class="chip" data-g="1" aria-pressed="false">Só faço perguntas rápidas</button>
+      <button class="chip" data-g="2" aria-pressed="false">Já estudo e resumo com IA</button>
+      <button class="chip" data-g="3" aria-pressed="false">Quero criar ferramentas</button>
+    </div>
+    <div class="cards" id="cards">
+      <article class="card" id="g1">
+        <span class="badge">Comece aqui</span>
+        <div class="thumb"><img src="img/capa-01.jpg" alt="" loading="lazy" width="620" height="877"></div>
+        <p class="lvl">Nível 1 · Básico</p>
+        <h3>Entenda a IA. Comece a usar.</h3>
+        <p class="for">Para quem usa IA em perguntas soltas e quer respostas melhores e mais seguras.</p>
+        <ul><li>Método PACE para escrever prompts</li><li>Cinco usos para começar hoje</li><li>Checklist 4C contra respostas erradas</li><li>Desafio de 7 dias</li></ul>
+        <p class="meta">PDF · 12 páginas · 88 KB</p>
+        <a class="btn btn-p" href="guias/ia-por-dentro-01-basico.pdf" target="_blank" rel="noopener">Baixar o guia básico</a>
+      </article>
+      <article class="card" id="g2">
+        <span class="badge">Seu próximo passo</span>
+        <div class="thumb"><img src="img/capa-02.jpg" alt="" loading="lazy" width="620" height="877"></div>
+        <p class="lvl">Nível 2 · Intermediário</p>
+        <h3>Da conversa ao método.</h3>
+        <p class="for">Para quem já usa IA no estudo e quer rotinas repetíveis, com fontes e qualidade medida.</p>
+        <ul><li>Leitura de artigos com PICO</li><li>Prompts em etapas e saídas estruturadas</li><li>Sensibilidade, especificidade e viés da IA</li><li>Projeto de 14 dias</li></ul>
+        <p class="meta">PDF · 14 páginas · 92 KB</p>
+        <a class="btn btn-p" href="guias/ia-por-dentro-02-intermediario.pdf" target="_blank" rel="noopener">Baixar o intermediário</a>
+      </article>
+      <article class="card" id="g3">
+        <span class="badge">Para construir</span>
+        <div class="thumb"><img src="img/capa-03.jpg" alt="" loading="lazy" width="620" height="877"></div>
+        <p class="lvl">Nível 3 · Avançado</p>
+        <h3>Da IA usada à IA criada.</h3>
+        <p class="for">Para quem quer construir sistemas e produtos de IA para médicos, clínicas ou hospitais.</p>
+        <ul><li>Arquitetura, RAG, fine-tuning e agentes</li><li>Privacidade e segurança desde o projeto</li><li>Métricas e MVP responsável</li><li>Roteiro de 90 dias</li></ul>
+        <p class="meta">PDF · 17 páginas · 100 KB</p>
+        <a class="btn btn-p" href="guias/ia-por-dentro-03-avancado.pdf" target="_blank" rel="noopener">Baixar o avançado</a>
+      </article>
+    </div>
+    <div class="all">
+      <p><b>Quer os três?</b> Baixe a coleção completa em um arquivo .zip (240 KB).</p>
+      <a class="btn btn-s" href="guias/ia-por-dentro-kit-completo.zip">Baixar os 3 guias</a>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="metodo">
+  <div class="box">
+    <div class="sec-head">
+      <h2>Monte um prompt agora com o método PACE</h2>
+      <p>É o método do guia básico: Papel, Alvo, Contexto e Entrega. Preencha os campos e copie o resultado para o ChatGPT, Claude ou Gemini.</p>
+    </div>
+    <div class="lab">
+      <form class="form" id="pace" autocomplete="off">
+        <div class="field"><label for="p"><b>P</b>Papel <small>quem a IA deve ser</small></label><input type="text" id="p"></div>
+        <div class="field"><label for="a"><b>A</b>Alvo <small>o que você quer conseguir</small></label><input type="text" id="a"></div>
+        <div class="field"><label for="c"><b>C</b>Contexto <small>para quem, limites, material</small></label><textarea id="c"></textarea></div>
+        <div class="field"><label id="el"><b>E</b>Entrega <small>formato da resposta</small></label>
+          <div class="seg" role="group" aria-labelledby="el" id="fmt">
+            <button type="button" class="chip" aria-pressed="true" data-v="explicação em três níveis: analogia simples, mecanismo e exemplo aplicado">3 níveis</button>
+            <button type="button" class="chip" aria-pressed="false" data-v="tabela comparativa">Tabela</button>
+            <button type="button" class="chip" aria-pressed="false" data-v="resumo de até 200 palavras">Resumo curto</button>
+            <button type="button" class="chip" aria-pressed="false" data-v="cinco perguntas de múltipla escolha com gabarito comentado">Questões</button>
+          </div>
+        </div>
+        <div class="row">
+          <button type="button" class="btn btn-s" id="ex">Usar exemplo do guia</button>
+          <button type="button" class="btn btn-s" id="clr">Limpar</button>
+        </div>
+      </form>
+      <div class="out" aria-live="polite">
+        <div class="out-top" aria-hidden="true"><i></i><i></i><i></i><span>prompt.txt</span></div>
+        <div class="prompt" id="out"></div>
+        <div class="row">
+          <button type="button" class="btn btn-p" id="cp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copiar prompt</button>
+          <span class="copied" id="ok" role="status"></span>
+        </div>
+        <p class="warn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex:none;margin-top:2px"><path d="M12 3l10 18H2z"/><path d="M12 10v4m0 3v.01"/></svg>Nunca cole nome, prontuário, exame ou qualquer dado de paciente em ferramenta de IA não autorizada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="seguranca" style="background:var(--bg2)">
+  <div class="box">
+    <div class="sec-head">
+      <h2>Antes do atalho, o sigilo</h2>
+      <p>Os três guias usam o mesmo semáforo para decidir o que pode entrar numa ferramenta de IA pública.</p>
+    </div>
+    <div class="lights">
+      <div class="light" style="--c:var(--ok)"><div class="dot"></div><h3>Verde: pode usar</h3><p>Conceitos gerais, dados públicos, textos seus sem dados de pacientes e casos totalmente fictícios.</p></div>
+      <div class="light" style="--c:var(--mid)"><div class="dot"></div><h3>Amarelo: verifique antes</h3><p>Documentos internos e informações da instituição. Confira autorização, contratos e controles.</p></div>
+      <div class="light" style="--c:var(--bad)"><div class="dot"></div><h3>Vermelho: não envie</h3><p>Prontuários, exames, imagens, áudios, nomes ou datas. Tirar o nome não basta para anonimizar.</p></div>
+    </div>
+    <p class="law"><b>Resolução CFM nº 2.454/2026</b> Em vigor desde 26/08/2026: a IA apoia, mas a decisão continua sendo do médico. <a class="ln" href="https://portal.cfm.org.br/noticias/regras-sobre-uso-da-ia-na-medicina-entram-em-vigor-no-dia-26-de-agosto" target="_blank" rel="noopener">Ler no portal do CFM</a></p>
+  </div>
+</section>
+
+<section class="sec about" id="autor">
+  <div class="box">
+    <div class="mono" aria-hidden="true">F</div>
+    <div>
+      <h2>Quem escreve: Dr. Filemom Sousa</h2>
+      <p>Médico em Palmas (TO), atuando na urgência e emergência, na sala vermelha e em UTI. Usa e desenvolve ferramentas de IA para estudo e rotina médica, e traduz o que funciona em conteúdo prático para outros médicos.</p>
+      <div class="tags"><span>CRM-TO 9056</span><span>Urgência e emergência</span><span>IA aplicada à medicina</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec end">
+  <div class="box">
+    <h2>Aprenda IA por dentro, um post de cada vez</h2>
+    <p>No Instagram, o conteúdo dos guias vira posts curtos: neurônios, tokens, viés e como aplicar na rotina.</p>
+    <div class="cta">
+      <a class="btn btn-p" href="https://www.instagram.com/drfilemombr/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>Seguir @drfilemombr</a>
+      <a class="btn btn-s" href="#guias">Baixar os guias</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="box">
+    <p>Material educativo e gratuito, revisado em novembro de 2026. Não substitui avaliação clínica, protocolos atualizados nem autorização institucional.</p>
+    <p>Dr. Filemom Sousa · CRM-TO 9056 · <a class="ln" href="https://www.instagram.com/drfilemombr/" target="_blank" rel="noopener">@drfilemombr</a></p>
+  </div>
+</footer>
+
+<script>
+{
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Capas abrem em leque uma vez
+  const stack = document.getElementById('stack');
+  requestAnimationFrame(() => setTimeout(() => stack.classList.remove('pre'), reduce ? 0 : 150));
+
+  // Malha de "neurônios" estática atrás do hero
+  const mesh = document.getElementById('mesh');
+  const drawMesh = () => {
+    const W = mesh.clientWidth, H = mesh.clientHeight; if (!W) return;
+    let s = 7, rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+    const n = W < 600 ? 26 : 54, pts = [];
+    for (let i = 0; i < n; i++) pts.push([rnd() * W, rnd() * H]);
+    let lines = '';
+    pts.forEach((p, i) => pts.slice(i + 1).forEach(q => {
+      const d = Math.hypot(p[0] - q[0], p[1] - q[1]);
+      if (d < 170) lines += `<line x1="${p[0]|0}" y1="${p[1]|0}" x2="${q[0]|0}" y2="${q[1]|0}" stroke="#14c3d3" stroke-opacity="${(0.28 * (1 - d / 170)).toFixed(2)}"/>`;
+    }));
+    mesh.innerHTML = lines + pts.map(p => `<circle cx="${p[0]|0}" cy="${p[1]|0}" r="1.8" fill="#6ae6e8" fill-opacity=".55"/>`).join('');
+  };
+  const meshObs = new ResizeObserver(drawMesh); meshObs.observe(mesh);
+
+  // Seletor de nível
+  const cards = document.getElementById('cards');
+  const chips = document.querySelectorAll('.picker .chip');
+  chips.forEach(b => b.addEventListener('click', () => {
+    const g = b.dataset.g, on = b.getAttribute('aria-pressed') !== 'true';
+    chips.forEach(c => c.setAttribute('aria-pressed', String(on && c === b)));
+    cards.classList.toggle('focus', on);
+    cards.querySelectorAll('.card').forEach(c => c.classList.toggle('hit', on && c.id === 'g' + g));
+    if (on && innerWidth < 960) document.getElementById('g' + g).scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }));
+
+  // Construtor PACE
+  const $ = id => document.getElementById(id);
+  const P = $('p'), A = $('a'), C = $('c'), out = $('out'), ok = $('ok');
+  const fmt = $('fmt').querySelectorAll('.chip');
+  const ph = { p: 'tutor de educação médica', a: 'revisar [TEMA] com foco na prática do plantão', c: 'Sou médico. Use linguagem objetiva e técnica.' };
+  P.placeholder = 'Ex.: ' + ph.p; A.placeholder = 'Ex.: ' + ph.a; C.placeholder = 'Ex.: ' + ph.c;
+  const esc = t => t.replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  const val = (el, k) => el.value.trim() ? `<mark>${esc(el.value.trim())}</mark>` : `<span class="ph">${esc(ph[k])}</span>`;
+  const plain = (el, k) => el.value.trim() || ph[k];
+  const entrega = () => [...fmt].find(b => b.getAttribute('aria-pressed') === 'true').dataset.v;
+  const tail = 'Não invente referências. Marque como "não confirmado" o que não tiver suporte e indique o que devo conferir em fonte primária.';
+  const build = html => html
+    ? `Atue como ${val(P,'p')}.\n\nObjetivo: ${val(A,'a')}.\n\nContexto: ${val(C,'c')}\n\nEntrega: <mark>${esc(entrega())}</mark>.\n\n${tail}`
+    : `Atue como ${plain(P,'p')}.\n\nObjetivo: ${plain(A,'a')}.\n\nContexto: ${plain(C,'c')}\n\nEntrega: ${entrega()}.\n\n${tail}`;
+  const render = () => { out.innerHTML = build(true); ok.textContent = ''; };
+  [P, A, C].forEach(el => el.addEventListener('input', render));
+  fmt.forEach(b => b.addEventListener('click', () => { fmt.forEach(x => x.setAttribute('aria-pressed', String(x === b))); render(); }));
+  $('ex').addEventListener('click', () => {
+    P.value = 'tutor de educação médica';
+    A.value = 'revisar fisiologia respiratória, com foco na relação ventilação/perfusão (V/Q)';
+    C.value = 'Sou médico e quero revisar o tema para o plantão. Use linguagem objetiva. Não use dados de pacientes.';
+    fmt.forEach((x, i) => x.setAttribute('aria-pressed', String(i === 0)));
+    render();
+  });
+  $('clr').addEventListener('click', () => { P.value = A.value = C.value = ''; render(); P.focus(); });
+  $('pace').addEventListener('submit', e => e.preventDefault());
+  $('cp').addEventListener('click', async () => {
+    const text = build(false);
+    try { await navigator.clipboard.writeText(text); ok.textContent = 'Copiado! Agora cole na sua IA.'; }
+    catch (e) {
+      const t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); ok.textContent = 'Copiado! Agora cole na sua IA.'; } catch (e2) { ok.textContent = 'Selecione o texto e copie manualmente.'; }
+      t.remove();
+    }
+  });
+  render();
+}
+</script>
+</body>
+</html>
