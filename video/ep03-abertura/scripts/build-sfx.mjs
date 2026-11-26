@@ -7,7 +7,9 @@ import { readFileSync, writeFileSync } from "node:fs";
 const TL = JSON.parse(readFileSync(new URL("../data/timeline.json", import.meta.url), "utf8"));
 const TY = JSON.parse(readFileSync(new URL("../data/typing.json", import.meta.url), "utf8"));
 const SR = 48000;
-const N = Math.round(TL.durationSec * SR);
+// duração: até o fim do último bloco produzido (os sons da abertura não mudam)
+const ENDS = [TL.durationSec, ...Object.values(TL.blocos || {}).map((b) => b.fim)];
+const N = Math.round(Math.max(...ENDS) * SR);
 
 let seed = 7741;
 const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 2 ** 32);
@@ -90,7 +92,7 @@ function roomChannel(beepPan) {
   // dois monitores multiparamétricos distantes (bipe de pulso), atrás de uma parede
   const beeps = new Float32Array(N);
   const monitor = (period, phase, freq, levelDb) => {
-    for (let t = phase; t < TL.durationSec; t += period) {
+    for (let t = phase; t < N / SR; t += period) {
       const i0 = Math.round(t * SR), n = Math.round(0.07 * SR);
       for (let k = 0; k < n && i0 + k < N; k++) {
         const env = Math.min(1, k / (0.004 * SR)) * Math.min(1, (n - k) / (0.012 * SR));
@@ -160,8 +162,17 @@ const swell = new Float32Array(N);
     swell[i] = Math.tanh(x * 1.3) * env * db(-30);
   }
 }
+// Bloco 1: sopro agudo e curto acompanhando o filete de luz que atravessa fragmento e ID
+const shimmer = new Float32Array(N);
+if (TL.blocos && TL.blocos.b1) {
+  const [a0, a1] = TL.blocos.b1.varredura; const hp = biquad("hp", 5200, 0.7), lp = biquad("lp", 9500, 0.7);
+  for (let i = Math.round(a0 * SR); i < Math.min(N, Math.round(a1 * SR)); i++) {
+    const p = (i / SR - a0) / (a1 - a0);
+    shimmer[i] = lp(hp(noise())) * Math.sin(Math.PI * p) ** 3 * db(-44);
+  }
+}
 const fxL = new Float32Array(N), fxR = new Float32Array(N);
-for (let i = 0; i < N; i++) { const v = trans[i] + tokWet[i] + swell[i]; fxL[i] = v; fxR[i] = v; }
+for (let i = 0; i < N; i++) { const v = trans[i] + tokWet[i] + swell[i] + shimmer[i]; fxL[i] = v; fxR[i] = v; }
 writeWav("../public/sfx/transicao-fragmentos.wav", fxL, fxR);
 
 // teclas: leve abertura estéreo (mono quase centrado, digitação à frente)

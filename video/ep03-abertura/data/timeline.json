@@ -59,6 +59,31 @@
         "Eles leem tokens."
       ],
       "highlight": "tokens"
+    },
+    {
+      "in": 11.25,
+      "out": 14.84,
+      "lines": [
+        "No episódio 1, vimos que a IA",
+        "faz contas com números,"
+      ],
+      "highlight": "números"
+    },
+    {
+      "in": 14.84,
+      "out": 16.86,
+      "lines": [
+        "mas você escreve palavras."
+      ],
+      "highlight": "palavras"
+    },
+    {
+      "in": 16.86,
+      "out": 19.2,
+      "lines": [
+        "Quem faz essa tradução",
+        "é o token."
+      ]
     }
   ],
   "title": {
@@ -74,7 +99,11 @@
         "highlight": "token"
       }
     ],
-    "out": 11.2
+    "out": 11.2,
+    "fadeOut": [
+      11.2,
+      11.6
+    ]
   },
   "camera": {
     "driftEnd": 6.1,
@@ -95,5 +124,63 @@
     "offUntil": 6.97,
     "fadeOutStart": 7.17,
     "fadeOutEnd": 7.6
+  },
+  "blocos": {
+    "b1": {
+      "_doc": "Bloco 1 · Das palavras aos números. Tempos medidos na gravação (envelope de 10 ms + Parakeet).",
+      "inicio": 11.2,
+      "fim": 19.367,
+      "voz": {
+        "No": 11.25,
+        "numeros": 14.0,
+        "numerosFim": 14.43,
+        "mas": 14.84,
+        "palavras": 15.9,
+        "palavrasFim": 16.38,
+        "quem": 16.86,
+        "eOToken": 18.37,
+        "token": 18.62,
+        "fimFala": 18.96,
+        "proximaFala": 19.39
+      },
+      "idRecuo": [
+        12.3,
+        13.5
+      ],
+      "focoIDs": [
+        13.62,
+        14.18
+      ],
+      "focoLetras": [
+        15.5,
+        16.02
+      ],
+      "varredura": [
+        18.05,
+        19.0
+      ],
+      "varredura_nitido": [
+        18.35,
+        18.85
+      ],
+      "repouso": [
+        [
+          13.5,
+          13.62
+        ],
+        [
+          14.18,
+          15.5
+        ],
+        [
+          16.02,
+          18.05
+        ],
+        [
+          19.0,
+          19.367
+        ]
+      ]
+    }
   }
 }

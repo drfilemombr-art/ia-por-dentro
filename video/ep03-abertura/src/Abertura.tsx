@@ -383,7 +383,8 @@ export const Title: React.FC<{ t: number }> = ({ t }) => (
     }}
   >
     {TL.title.parts.map((p, i) => {
-      const o = lerp(t, p.in - 0.033, p.in + 0.17, 0, 1, easeOut);
+      const fo = (TL.title as { fadeOut?: number[] }).fadeOut;
+      const o = lerp(t, p.in - 0.033, p.in + 0.17, 0, 1, easeOut) * (fo ? 1 - lerp(t, fo[0], fo[1], 0, 1) : 1);
       const y = lerp(t, p.in - 0.033, p.in + 0.25, 16, 0, easeOut);
       return (
         <div key={i} style={{ opacity: o, transform: `translateY(${y}px)` }}>

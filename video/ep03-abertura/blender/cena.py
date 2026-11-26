@@ -23,7 +23,10 @@ TL = json.load(open(os.path.join(ROOT, "data/timeline.json")))
 TY = json.load(open(os.path.join(ROOT, "data/typing.json")))
 TOK = json.load(open(os.path.join(ROOT, "data/tokens.json")))
 FPS = TL["fps"]
-NFRAMES = round(TL["durationSec"] * FPS)
+NFRAMES = round(TL["durationSec"] * FPS)          # abertura: quadros 0–335
+B1 = TL["blocos"]["b1"]                            # Bloco 1 · Das palavras aos números
+NTOTAL = round(B1["fim"] * FPS)                     # último quadro renderizável + 1
+T_OPEN_END = (NFRAMES - 1) / FPS
 FONT_TEXT = os.path.join(ROOT, "blender/fonts/Figtree-Medium.ttf")
 FONT_ID = os.path.join(ROOT, "blender/fonts/JetBrainsMono-Medium.ttf")
 
@@ -368,7 +371,7 @@ def build(args):
     try: sc.view_settings.look = "AgX - Medium High Contrast"
     except Exception: pass
     sc.view_settings.exposure = 0.0
-    sc.frame_start, sc.frame_end = 0, NFRAMES - 1
+    sc.frame_start, sc.frame_end = 0, NTOTAL - 1
 
     world = bpy.data.worlds.new("mundo"); sc.world = world; wn = nodes(world)
     bg = wn.nodes.new("ShaderNodeBackground"); bg.inputs["Color"].default_value = (0.0015, 0.0018, 0.0026, 1)
@@ -523,12 +526,15 @@ def build(args):
     lf = bpy.data.lights.new("preenchimento", "AREA"); lf.size = 0.2; lf.color = kelvin(7000); lf.energy = 0.0
     fill_l = new_obj("preenchimento", lf)
 
+    lsw = bpy.data.lights.new("filete", "AREA"); lsw.shape = "RECTANGLE"; lsw.size = 0.0025; lsw.size_y = 0.20
+    lsw.color = kelvin(6800); lsw.energy = 0.0
+    sweep = new_obj("filete", lsw); sweep.rotation_euler = (math.pi / 2, 0, 0); sweep.visible_camera = False
     frag = bpy.data.collections.new("fragmentos")
     for o in [*runs_objs, *tiles, *ids, *links, *[m for _, m in marks]]: frag.objects.link(o)
-    for L_ in (key_l, rim_l, fill_l): L_.light_linking.receiver_collection = frag
+    for L_ in (key_l, rim_l, fill_l, sweep): L_.light_linking.receiver_collection = frag
     fill_l.visible_glossy = False; rim_l.visible_diffuse = False
 
-    return dict(sc=sc, cam=cam, target=target, content=content, screen=screen, screen_mat=screen_mat, ui=[ui_m, ui_bar], caret=caret,
+    return dict(monitor=[screen, bez, back, door] + [o for o in bpy.data.objects if o.name.startswith("bokeh_")], sweep=sweep, sc=sc, cam=cam, target=target, content=content, screen=screen, screen_mat=screen_mat, ui=[ui_m, ui_bar], caret=caret,
                 caret_m=caret_m, runs=runs_objs, letter_mats=letter_mats, tiles=tiles, tile_mats=tile_mats, rim_mats=rim_mats, ids=ids,
                 id_mats=id_mats, id_w=id_w, links=links, marks=marks, keys=keys, lmon=lmon, lp=lp, key_l=key_l, rim_l=rim_l, fill_l=fill_l,
                 size=size, TILE_TOP=TILE_TOP, TILE_BOT=TILE_BOT, DEPTH=DEPTH, field=field, bars=bars)
@@ -577,15 +583,51 @@ def cam_state(t):
     fstop = lerp(1.8, 2.8, rack); fstop = lerp(fstop, 5.6, ramp(t, T_PUSH0, T_PUSH1))
     return pos, tgt, focus, fstop
 
+# ---------------------------------------------------------------------------
+# Bloco 1 · "No episódio um ... números ... palavras ... é o token"
+# ---------------------------------------------------------------------------
+def b1_id_depth(t):
+    """IDs recuam para uma camada própria, atrás dos fragmentos (m, no eixo z do conteúdo)."""
+    return ramp(t, B1["idRecuo"][0], B1["idRecuo"][1]) * 0.9 * E
+
+def b1_focus(t, d_plane):
+    """Foco e diafragma do Bloco 1. d_plane = distância da câmera ao plano z=0 do conteúdo."""
+    z_letters = 0.33 * E
+    z_ids = 0.18 * E - b1_id_depth(t)
+    k = ramp(t, *B1["focoIDs"]) - ramp(t, *B1["focoLetras"])   # 0 = letras, 1 = IDs
+    z = lerp(z_letters, z_ids, k)
+    fstop = lerp(5.6, 2.0, ramp(t, B1["idRecuo"][0], B1["idRecuo"][1]))
+    both = ramp(t, *B1["varredura_nitido"])                    # fecha o diafragma: os dois nítidos
+    z = lerp(z, (z_letters + z_ids) / 2, both)
+    fstop = lerp(fstop, 11.0, both)
+    return d_plane - z, fstop
+
+def b1_sweep(t):
+    """Posição (0..1) e intensidade do filete de luz que atravessa o par fragmento–ID."""
+    a, b = B1["varredura"]
+    p = (t - a) / (b - a)
+    return min(1.0, max(0.0, p)), (math.sin(math.pi * p) ** 2 if 0 < p < 1 else 0.0)
+
 def animate(S):
     cam, tgt = S["cam"], S["target"]
-    for f in range(NFRAMES):
-        t = f / FPS
+    for f in range(NTOTAL):
+        t_real = f / FPS
+        t = min(t_real, T_OPEN_END)   # a abertura congela no seu último estado; o bloco 1 age por cima
         pos, look, focus, fstop = cam_state(t)
         cam.location = pos; cam.keyframe_insert("location", frame=f)
         tgt.location = look; tgt.keyframe_insert("location", frame=f)
         cam.data.dof.focus_distance = focus; cam.data.dof.keyframe_insert("focus_distance", frame=f)
+        if t_real > T_OPEN_END:
+            d_plane = (look - pos).length
+            focus, fstop = b1_focus(t_real, d_plane)
+            cam.data.dof.focus_distance = focus; cam.data.dof.keyframe_insert("focus_distance", frame=f)
         cam.data.dof.aperture_fstop = fstop; cam.data.dof.keyframe_insert("aperture_fstop", frame=f)
+        # filete de luz (reflexo do monitor) do bloco 1
+        sp_, se_ = b1_sweep(t_real)
+        c0 = content_to_world(BLOCK_L - 0.01, -PITCH, 0.0); c1 = content_to_world(BLOCK_R + 0.01, -PITCH, 0.0)
+        S["sweep"].location = c0.lerp(c1, sp_) + Vector((0, -0.07, 0))
+        S["sweep"].data.energy = 0.22 * se_
+        S["sweep"].keyframe_insert("location", frame=f); S["sweep"].data.keyframe_insert("energy", frame=f)
 
         # padrão de subpixels: aparece só de perto, some quando a tela "apaga"
         dist = (look - pos).length
@@ -617,6 +659,8 @@ def animate(S):
             o.keyframe_insert("location", frame=f); o.keyframe_insert("rotation_euler", frame=f)
 
         # campo de texto e barras de UI: apagam com a tela e saem da renderização depois
+        for o in S["monitor"]:   # no bloco 1, monitor e luzes do corredor saem da renderização: os IDs recuam atrás do plano da tela
+            o.hide_render = t_real > T_OPEN_END; o.keyframe_insert("hide_render", frame=f)
         for o in [S["field"], *S["bars"]]:
             o.hide_render = t > T_SCREEN_OFF1 + 0.1; o.keyframe_insert("hide_render", frame=f)
         # teclas: afundam 1,6 mm quando pressionadas (≈ 70 ms)
@@ -678,7 +722,8 @@ def animate(S):
             b = ramp(t, ti, ti + 0.35, ease_out)
             io = S["ids"][i]
             id_y = y + S["TILE_BOT"] - 0.62 * E
-            io.location = (left + w / 2 - S["id_w"][i] / 2, lerp(id_y + 0.25 * E, id_y, b), lift * 0.6)
+            idz = lift * 0.6 - b1_id_depth(t_real)
+            io.location = (left + w / 2 - S["id_w"][i] / 2, lerp(id_y + 0.25 * E, id_y, b), idz)
             io.keyframe_insert("location", frame=f)
             im = S["id_mats"][i].node_tree.nodes["bsdf"]
             im.inputs["Alpha"].default_value = b; im.inputs["Alpha"].keyframe_insert("default_value", frame=f)
@@ -686,7 +731,11 @@ def animate(S):
             ln = S["links"][i]
             top_y = y + S["TILE_BOT"]; bot_y = id_y + 0.42 * E * 0.75
             L = max(1e-5, (top_y - bot_y) * b * 0.82)
-            ln.scale = (1, L, 1); ln.location = (left + w / 2, top_y - L / 2, lift * 0.6)
+            # filete inclinado em profundidade quando os IDs recuam (liga placa → ID em 3D)
+            dz = (lift * 0.6) - idz
+            L3 = math.hypot(L, dz * b)
+            ln.scale = (1, max(1e-5, L3), 1); ln.location = (left + w / 2, top_y - L / 2, lift * 0.6 - dz * b / 2)
+            ln.rotation_euler = (math.atan2(-dz * b, L) if L > 1e-5 else 0.0, 0, 0); ln.keyframe_insert("rotation_euler", frame=f)
             ln.keyframe_insert("scale", frame=f); ln.keyframe_insert("location", frame=f)
         for r, mk in S["marks"]:
             i = RUNS.index(r)
@@ -736,7 +785,7 @@ def set_bodies(S, frame):
 def main():
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:]
     ap = argparse.ArgumentParser()
-    ap.add_argument("--start", type=int, default=0); ap.add_argument("--end", type=int, default=NFRAMES - 1)
+    ap.add_argument("--start", type=int, default=0); ap.add_argument("--end", type=int, default=NTOTAL - 1)
     ap.add_argument("--frames", type=str, default=""); ap.add_argument("--samples", type=int, default=48)
     ap.add_argument("--scale", type=int, default=100); ap.add_argument("--out", default=os.path.join(ROOT, "out/frames"))
     ap.add_argument("--save-blend", default="")
@@ -750,7 +799,11 @@ def main():
     import shutil
     COPY = {f: 186 for f in list(range(187, 199)) + list(range(210, 212))}
     COPY.update({f: 199 for f in range(200, 210)})
-    COPY.update({f: 318 for f in range(319, NFRAMES)})
+    COPY.update({f: 318 for f in range(319, round(B1["idRecuo"][0] * FPS))})
+    # bloco 1: trechos em repouso (câmera parada, nada muda) viram cópia do 1º quadro de cada trecho
+    for a, b in B1["repouso"]:
+        fa, fb = math.ceil(a * FPS), math.floor(b * FPS)
+        COPY.update({f: fa for f in range(fa + 1, fb + 1)})
     todo = [f for f in frames if f not in COPY] + [f for f in frames if f in COPY]
     for f in todo:
         t0 = time.time()

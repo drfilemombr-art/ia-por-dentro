@@ -28,29 +28,34 @@ const Label: React.FC<{ top: number; opacity: number; children: React.ReactNode;
   </div>
 );
 
-const Sound: React.FC = () => {
+// `from`: quadro absoluto da linha do tempo do episódio em que esta composição começa.
+// Todas as trilhas são cortadas no mesmo ponto, então voz, efeitos e imagem continuam alinhados.
+const Sound: React.FC<{ from: number; fadeEnd: boolean }> = ({ from, fadeEnd }) => {
   const { fps, durationInFrames } = useVideoConfig();
-  const v = (f: number, a: number, b: number) => interpolate(f / fps, [a, b], [0, 1], clamp);
+  const v = (f: number, a: number, b: number) => interpolate((f + from) / fps, [a, b], [0, 1], clamp);
+  const end = (f: number) => (fadeEnd ? 1 - interpolate(f, [durationInFrames - 8, durationInFrames - 1], [0, 1], clamp) : 1);
   return (
     <>
-      <Audio src={staticFile(TL.audio.file)} />
-      <Audio src={staticFile("sfx/teclas.wav")} />
-      <Audio src={staticFile("sfx/ambiente-sala.wav")} volume={(f) => Math.min(v(f, 0, 0.12), 1 - v(f, PUSH0, PUSH1 - 0.1))} />
-      <Audio src={staticFile("sfx/ambiente-tela.wav")} volume={(f) => Math.min(v(f, PUSH0, PUSH1 - 0.1), 1 - interpolate(f, [durationInFrames - 8, durationInFrames - 1], [0, 1], clamp))} />
-      <Audio src={staticFile("sfx/transicao-fragmentos.wav")} />
+      <Audio src={staticFile(TL.audio.file)} trimBefore={from} />
+      <Audio src={staticFile("sfx/teclas.wav")} trimBefore={from} />
+      <Audio src={staticFile("sfx/ambiente-sala.wav")} trimBefore={from} volume={(f) => Math.min(v(f, 0, 0.12), 1 - v(f, PUSH0, PUSH1 - 0.1))} />
+      <Audio src={staticFile("sfx/ambiente-tela.wav")} trimBefore={from} volume={(f) => Math.min(v(f, PUSH0, PUSH1 - 0.1), end(f))} />
+      <Audio src={staticFile("sfx/transicao-fragmentos.wav")} trimBefore={from} />
     </>
   );
 };
 
-export const Cinema: React.FC = () => {
-  const frame = useCurrentFrame();
+export type CinemaProps = { from?: number; fadeEnd?: boolean; seam?: number | null };
+
+export const Cinema: React.FC<CinemaProps> = ({ from = 0, fadeEnd = true, seam = null }) => {
+  const frame = useCurrentFrame() + from;
   const { fps } = useVideoConfig();
   const ready = useFontsReady();
   const t = frame / fps;
   const scrim = 1 - interpolate(t, [PUSH0, PUSH1], [0, 1], clamp);
   return (
     <AbsoluteFill style={{ background: "#000" }}>
-      <Sound />
+      <Sound from={from} fadeEnd={fadeEnd} />
       <Img src={staticFile(`frames/f${String(frame).padStart(4, "0")}.png`)} style={{ width: 1080, height: 1920 }} />
       {/* véu escuro só atrás da legenda enquanto a mesa está em quadro (legibilidade sobre o teclado) */}
       <AbsoluteFill
@@ -73,6 +78,10 @@ export const Cinema: React.FC = () => {
           </Label>
           <Captions t={t} />
           <Title t={t} />
+          {/* prévia de revisão: marca discreta no quadro da emenda (não existe no trecho limpo) */}
+          {seam !== null && frame >= seam && frame < seam + 3 ? (
+            <div style={{ position: "absolute", top: 40, right: 40, fontFamily: FONT.caption, fontSize: 24, color: "#E5B85C" }}>emenda · q{seam}</div>
+          ) : null}
         </>
       ) : null}
     </AbsoluteFill>
