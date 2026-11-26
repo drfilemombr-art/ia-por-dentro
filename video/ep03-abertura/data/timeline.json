@@ -61,7 +61,7 @@
       "highlight": "tokens"
     },
     {
-      "in": 11.25,
+      "in": 11.38,
       "out": 14.84,
       "lines": [
         "No episódio 1, vimos que a IA",
@@ -102,7 +102,7 @@
     "out": 11.2,
     "fadeOut": [
       11.2,
-      11.6
+      11.4
     ]
   },
   "camera": {
