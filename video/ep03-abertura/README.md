@@ -1,4 +1,57 @@
-# IA por Dentro · EP03 · prova de edição da abertura
+# IA por Dentro · EP03 · abertura
+
+## v2: reconstrução cinematográfica (Blender/Cycles + Remotion)
+
+**Arquitetura híbrida.** `blender/cena.py` (Python + `bpy` 5.3, Cycles em CPU) renderiza toda a
+imagem física e 3D. A composição `Cinema` do Remotion (`src/Cinema.tsx`) põe por cima as
+legendas, o título-pergunta e os rótulos científicos, e mixa o som. Os dois leem os mesmos tempos
+(`data/timeline.json`, `data/typing.json`, `data/tokens.json`), então imagem, legenda e voz não
+se desencontram.
+
+```bash
+pip install bpy fonttools brotli                  # Blender como módulo Python (3.13)
+python3 blender/cena.py --samples 12 --out out/frames   # 336 quadros PNG (≈ 30–40 s cada em 4 núcleos)
+ln -sfn ../out/frames public/frames
+npm run sfx && npx remotion render src/index.ts Cinema out/ep03-abertura-cinema.mp4
+```
+
+### O que deixava a v1 com cara de interface animada
+- Tudo era plano: retângulos CSS, gradiente de "reflexo" e vinheta desenhados, nenhuma luz real.
+- O zoom era uma escala 2D: sem paralaxe, profundidade de campo nem motion blur.
+- Faltava um mundo físico: nem mesa, nem teclado, nem monitor, nem fonte de luz.
+- As caixas dos tokens eram contornos chapados, sem volume, material ou sombra.
+
+### Storyboard (tempos da narração)
+| Plano | Tempo | Câmera / ótica | Luz | Ação |
+|---|---|---|---|---|
+| 1 · Mãos fora de quadro, teclado | 0–2,7 s | 35 mm, baixa, rente ao teclado, f/1.8, foco nas teclas | monitor 7200 K sobre as teclas; prática 3100 K à esquerda; corredor em bokeh | as teclas afundam no ritmo exato da digitação (ABNT2, tecla morta em ã/â) |
+| 2 · Rack focus + grua | 1,2–5,9 s | sobe e avança até a tela em ângulo leve; o foco passa das teclas para o texto (f/2.8) | idem | "paciente em ventilação mecânica" surge na tela |
+| 3 · Pausa | 5,9–7,08 s | parada | idem | digitação para em "nem"; o cursor pisca uma vez |
+| 4 · Travessia | 7,08–8,15 s | dolly-in até o macro, de ângulo leve para frontal, f/5.6, motion blur 180° | a tela apaga; entram luz-chave rasante 5200 K, recorte azul e preenchimento, ligados só aos fragmentos (light linking) | as letras deixam de ser pixels e ganham volume |
+| 5 · Tokenização | 7,82–8,55 s | quase parada | idem | 7 placas de vidro fumê emergem atrás das letras, cada uma acendendo seu filete ciano (a fronteira do token); os vãos se abrem |
+| 6 · IDs | 8,42–9,2 s | desacelera | idem | o ID real de cada fragmento desce da placa por um filete |
+| 7 · Pergunta | 8,94–11,2 s | desacelera até parar em 10,6 s | idem | título-legenda "Mas, afinal, o que é um token?" |
+
+### Fidelidade científica
+Os fragmentos e IDs vêm do o200k_base, verificados (ver "Tokenização"). A cena separa
+texto (pixels na tela), tokens (placas) e IDs (números), e não mostra embeddings. A travessia é
+metáfora, e o rótulo "ILUSTRAÇÃO" está na tela. Outro rótulo avisa que Claude, Gemini e outros
+modelos usam tokenizadores próprios.
+
+### Limitações encontradas
+- **Sem GPU:** Cycles em 4 núcleos de CPU, cerca de 30–40 s por quadro em 1080 × 1920 com
+  12 amostras e denoiser OIDN. O master em 2160 × 3840 levaria por volta de 4× isso (mais de
+  12 h), então a entrega é em 1080 × 1920 nativo, sem upscale.
+- **Sem acesso a Poly Haven, ambientCG ou bibliotecas de modelos:** não há HDRI nem texturas
+  PBR escaneadas. Madeira, alumínio escovado, PBT do teclado, borracha e aço são materiais
+  procedurais.
+- **Sem mãos humanas:** não dá para fazê-las com qualidade fotográfica aqui. Seguindo o pedido,
+  o plano usa teclado e tela, sem humano artificial.
+- **Subpixels:** a máscara RGB de subpixels existe, mas só acende quando cada pixel da tela ocupa
+  9 pixels ou mais do vídeo, para evitar moiré. Neste trajeto ela quase não aparece.
+- **Sem volumetria:** neblina e luz volumétrica foram descartadas pelo custo em CPU.
+
+## v1: prova de edição da abertura (2D)
 
 Composição em [Remotion](https://www.remotion.dev/) da abertura de **"Afinal, o que é um token?"**.
 O trecho vai da primeira palavra da narração até logo depois de "Mas, afinal, o que é um token?":

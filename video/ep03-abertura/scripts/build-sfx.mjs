@@ -125,6 +125,45 @@ function writeWav(path, L, R) {
   writeFileSync(new URL(path, import.meta.url), buf);
   console.log(path, "pico", (20 * Math.log10(peak)).toFixed(1), "dBFS; RMS", (20 * Math.log10(rms(L))).toFixed(1), "dBFS");
 }
+// ---------- Travessia e fragmentos ----------
+// Ar da aproximação: ruído com banda que sobe enquanto a câmera entra na tela.
+const V = TL.voice;
+const trans = new Float32Array(N);
+{
+  const t0 = 7.08, t1 = 8.15; let bpf = null; let lastFc = 0;
+  for (let i = Math.round(t0 * SR); i < Math.min(N, Math.round(t1 * SR)); i++) {
+    const p = (i / SR - t0) / (t1 - t0);
+    const fc = 260 * Math.pow(2200 / 260, p);
+    if (!bpf || Math.abs(fc - lastFc) > 20) { bpf = biquad("bp", fc, 0.9); lastFc = fc; }
+    const env = Math.sin(Math.PI * Math.min(1, p * 1.15)) ** 2;
+    trans[i] = bpf(noise()) * env * db(-31);
+  }
+}
+// Fragmentos: um toque curto e vítreo por token, na entrada da placa (afinação sobe levemente).
+const tok = new Float32Array(N);
+for (let k = 0; k < 7; k++) {
+  const t = V.tokensWord + k * 0.085 + 0.05, i0 = Math.round(t * SR), f0 = 1760 * Math.pow(1.045, k);
+  for (let n = 0; n < 0.25 * SR && i0 + n < N; n++) {
+    const tt = n / SR, env = Math.exp(-tt / 0.045) * Math.min(1, n / (0.0015 * SR));
+    tok[i0 + n] += (Math.sin(2 * Math.PI * f0 * tt) + 0.45 * Math.sin(2 * Math.PI * f0 * 2.76 * tt) * Math.exp(-tt / 0.02)) * env * db(-36);
+  }
+}
+const tokWet = reverb(tok, 0.6, 0.35, 6000);
+// Tensão antes da pergunta: um grave que cresce na pausa e se recolhe quando a voz volta em "Mas".
+const swell = new Float32Array(N);
+{
+  const a = 8.38, b = V.mas - 0.02, c = V.mas + 0.30;
+  for (let i = Math.round(a * SR); i < Math.min(N, Math.round(c * SR)); i++) {
+    const t = i / SR;
+    const env = t < b ? ((t - a) / (b - a)) ** 2 : Math.max(0, 1 - (t - b) / (c - b)) ** 1.5;
+    const x = Math.sin(2 * Math.PI * 73.4 * t) + 0.5 * Math.sin(2 * Math.PI * 146.8 * t) + 0.25 * Math.sin(2 * Math.PI * 220.2 * t);
+    swell[i] = Math.tanh(x * 1.3) * env * db(-30);
+  }
+}
+const fxL = new Float32Array(N), fxR = new Float32Array(N);
+for (let i = 0; i < N; i++) { const v = trans[i] + tokWet[i] + swell[i]; fxL[i] = v; fxR[i] = v; }
+writeWav("../public/sfx/transicao-fragmentos.wav", fxL, fxR);
+
 // teclas: leve abertura estéreo (mono quase centrado, digitação à frente)
 writeWav("../public/sfx/teclas.wav", keysWet, keysWet);
 writeWav("../public/sfx/ambiente-sala.wav", ambL, ambR);

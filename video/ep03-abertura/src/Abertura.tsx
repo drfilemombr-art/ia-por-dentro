@@ -309,7 +309,7 @@ const Grain: React.FC = () => (
 // ---------------------------------------------------------------------------
 // Legendas e título
 // ---------------------------------------------------------------------------
-const Highlighted: React.FC<{ text: string; word?: string }> = ({ text, word }) => {
+export const Highlighted: React.FC<{ text: string; word?: string }> = ({ text, word }) => {
   if (!word || !text.includes(word)) return <>{text}</>;
   const i = text.indexOf(word);
   return (
@@ -323,7 +323,7 @@ const Highlighted: React.FC<{ text: string; word?: string }> = ({ text, word }) 
 
 // Blocos colados trocam por corte seco (nunca dois textos sobrepostos no mesmo lugar);
 // só há fusão quando a legenda nasce ou termina num trecho sem legenda.
-const Captions: React.FC<{ t: number }> = ({ t }) => {
+export const Captions: React.FC<{ t: number }> = ({ t }) => {
   const fade = 0.1;
   const caps = TL.captions;
   return (
@@ -366,7 +366,7 @@ const Captions: React.FC<{ t: number }> = ({ t }) => {
   );
 };
 
-const Title: React.FC<{ t: number }> = ({ t }) => (
+export const Title: React.FC<{ t: number }> = ({ t }) => (
   <div
     style={{
       position: "absolute",
