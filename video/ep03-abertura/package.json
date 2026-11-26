@@ -1,0 +1,30 @@
+{
+  "name": "ep03-abertura",
+  "private": true,
+  "version": "0.1.0",
+  "description": "IA por Dentro EP03 — prova de edição da abertura (Remotion)",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "audio": "bash scripts/prepare-audio.sh",
+    "tokenize": "node scripts/tokenize.mjs",
+    "typing": "node scripts/build-typing.mjs",
+    "sfx": "node scripts/build-sfx.mjs",
+    "srt": "node scripts/build-srt.mjs",
+    "render": "remotion render src/index.ts Abertura out/ep03-abertura.mp4",
+    "revisar": "python3 scripts/revisar-quadros.py out/ep03-abertura.mp4 public/audio/narracao.mp3"
+  },
+  "dependencies": {
+    "@fontsource/figtree": "5.3.0",
+    "@fontsource/space-grotesk": "5.3.0",
+    "@remotion/cli": "4.0.547",
+    "@remotion/renderer": "4.0.547",
+    "js-tiktoken": "1.0.21",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.547"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.12",
+    "typescript": "5.6.3"
+  }
+}

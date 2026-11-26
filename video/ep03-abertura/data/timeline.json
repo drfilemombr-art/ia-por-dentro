@@ -1,0 +1,99 @@
+{
+  "_doc": "Tempos em segundos, medidos na gravação original (envelope RMS de 5 ms + Parakeet TDT v3 e Whisper turbo via sherpa-onnx). 30 fps.",
+  "fps": 30,
+  "durationSec": 11.2,
+  "audio": {
+    "file": "audio/narracao-dual-mono.wav",
+    "trimBeforeSec": 0,
+    "_endNote": "Fim da pergunta em 10.79 s; a frase seguinte ('No episódio 1...') começa em 11.278 s. Corte em 11.20 s.",
+    "_sourceNote": "Gerado de audio/narracao.mp3 por scripts/prepare-audio.sh: decodificação sem ganho, mono copiado nos dois canais (evita a perda de 3 dB da conversão mono→estéreo do FFmpeg)."
+  },
+  "voice": {
+    "firstWord": 0.075,
+    "nem": 6.12,
+    "letrasEnd": 6.87,
+    "eles": 7.17,
+    "tokensWord": 7.82,
+    "tokensEnd": 8.4,
+    "mas": 8.94,
+    "afinalEnd": 9.55,
+    "oQue": 9.745,
+    "tokenWordInQuestion": 10.385,
+    "questionEnd": 10.79,
+    "nextPhraseStart": 11.278
+  },
+  "captions": [
+    {
+      "in": 0.0,
+      "out": 2.28,
+      "lines": [
+        "Quando você escreve",
+        "para o ChatGPT,"
+      ]
+    },
+    {
+      "in": 2.28,
+      "out": 4.09,
+      "lines": [
+        "o Claude ou o Gemini,"
+      ]
+    },
+    {
+      "in": 4.09,
+      "out": 6.12,
+      "lines": [
+        "nenhum deles lê palavras,"
+      ]
+    },
+    {
+      "in": 6.12,
+      "out": 7.15,
+      "lines": [
+        "nem letras."
+      ]
+    },
+    {
+      "in": 7.15,
+      "out": 8.55,
+      "lines": [
+        "Eles leem tokens."
+      ],
+      "highlight": "tokens"
+    }
+  ],
+  "title": {
+    "_doc": "A pergunta é título e legenda ao mesmo tempo: aparece uma única vez, no espaço da legenda.",
+    "parts": [
+      {
+        "in": 8.94,
+        "text": "Mas, afinal,"
+      },
+      {
+        "in": 9.745,
+        "text": "o que é um token?",
+        "highlight": "token"
+      }
+    ],
+    "out": 11.2
+  },
+  "camera": {
+    "driftEnd": 6.1,
+    "driftScale": 1.03,
+    "pushStart": 7.1,
+    "pushEnd": 8.05,
+    "pushScale": 1.6
+  },
+  "tokens": {
+    "boxesStart": 7.82,
+    "boxStagger": 0.085,
+    "gapsStart": 7.92,
+    "gapsEnd": 8.55,
+    "labelIn": 8.55
+  },
+  "caret": {
+    "lastKeyHoldUntil": 6.63,
+    "offUntil": 6.97,
+    "fadeOutStart": 7.17,
+    "fadeOutEnd": 7.6
+  }
+}

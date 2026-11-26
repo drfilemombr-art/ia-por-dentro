@@ -1,0 +1,25 @@
+1
+00:00:00,000 --> 00:00:02,280
+Quando você escreve
+para o ChatGPT,
+
+2
+00:00:02,280 --> 00:00:04,090
+o Claude ou o Gemini,
+
+3
+00:00:04,090 --> 00:00:06,120
+nenhum deles lê palavras,
+
+4
+00:00:06,120 --> 00:00:07,150
+nem letras.
+
+5
+00:00:07,150 --> 00:00:08,550
+Eles leem tokens.
+
+6
+00:00:08,940 --> 00:00:11,200
+Mas, afinal,
+o que é um token?

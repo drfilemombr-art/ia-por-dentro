@@ -1,0 +1,6 @@
+node_modules/
+out/
+# Narração e efeitos ficam fora do repositório (público): a voz é gerada por clone de voz
+# e os efeitos são recriados por `npm run sfx`.
+public/audio/
+public/sfx/

@@ -1,0 +1,193 @@
+{
+ "text": "paciente em ventilação mecânica",
+ "pretyped": 2,
+ "fps": 30,
+ "keys": [
+  {
+   "t": 0.12,
+   "kind": "char",
+   "key": "c",
+   "charIndex": 2
+  },
+  {
+   "t": 0.313,
+   "kind": "char",
+   "key": "i",
+   "charIndex": 3
+  },
+  {
+   "t": 0.486,
+   "kind": "char",
+   "key": "e",
+   "charIndex": 4
+  },
+  {
+   "t": 0.694,
+   "kind": "char",
+   "key": "n",
+   "charIndex": 5
+  },
+  {
+   "t": 0.855,
+   "kind": "char",
+   "key": "t",
+   "charIndex": 6
+  },
+  {
+   "t": 1.049,
+   "kind": "char",
+   "key": "e",
+   "charIndex": 7
+  },
+  {
+   "t": 1.242,
+   "kind": "space",
+   "key": " ",
+   "charIndex": 8
+  },
+  {
+   "t": 1.579,
+   "kind": "char",
+   "key": "e",
+   "charIndex": 9
+  },
+  {
+   "t": 1.748,
+   "kind": "char",
+   "key": "m",
+   "charIndex": 10
+  },
+  {
+   "t": 1.941,
+   "kind": "space",
+   "key": " ",
+   "charIndex": 11
+  },
+  {
+   "t": 2.38,
+   "kind": "char",
+   "key": "v",
+   "charIndex": 12
+  },
+  {
+   "t": 2.565,
+   "kind": "char",
+   "key": "e",
+   "charIndex": 13
+  },
+  {
+   "t": 2.745,
+   "kind": "char",
+   "key": "n",
+   "charIndex": 14
+  },
+  {
+   "t": 2.941,
+   "kind": "char",
+   "key": "t",
+   "charIndex": 15
+  },
+  {
+   "t": 3.137,
+   "kind": "char",
+   "key": "i",
+   "charIndex": 16
+  },
+  {
+   "t": 3.331,
+   "kind": "char",
+   "key": "l",
+   "charIndex": 17
+  },
+  {
+   "t": 3.545,
+   "kind": "char",
+   "key": "a",
+   "charIndex": 18
+  },
+  {
+   "t": 3.726,
+   "kind": "char",
+   "key": "ç",
+   "charIndex": 19
+  },
+  {
+   "t": 3.904,
+   "kind": "dead",
+   "key": "~",
+   "charIndex": null
+  },
+  {
+   "t": 4.014,
+   "kind": "char",
+   "key": "ã",
+   "charIndex": 20
+  },
+  {
+   "t": 4.213,
+   "kind": "char",
+   "key": "o",
+   "charIndex": 21
+  },
+  {
+   "t": 4.413,
+   "kind": "space",
+   "key": " ",
+   "charIndex": 22
+  },
+  {
+   "t": 4.722,
+   "kind": "char",
+   "key": "m",
+   "charIndex": 23
+  },
+  {
+   "t": 4.92,
+   "kind": "char",
+   "key": "e",
+   "charIndex": 24
+  },
+  {
+   "t": 5.091,
+   "kind": "char",
+   "key": "c",
+   "charIndex": 25
+  },
+  {
+   "t": 5.256,
+   "kind": "dead",
+   "key": "^",
+   "charIndex": null
+  },
+  {
+   "t": 5.366,
+   "kind": "char",
+   "key": "â",
+   "charIndex": 26
+  },
+  {
+   "t": 5.559,
+   "kind": "char",
+   "key": "n",
+   "charIndex": 27
+  },
+  {
+   "t": 5.752,
+   "kind": "char",
+   "key": "i",
+   "charIndex": 28
+  },
+  {
+   "t": 5.917,
+   "kind": "char",
+   "key": "c",
+   "charIndex": 29
+  },
+  {
+   "t": 6.08,
+   "kind": "char",
+   "key": "a",
+   "charIndex": 30
+  }
+ ]
+}
